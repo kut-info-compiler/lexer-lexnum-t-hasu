@@ -58,6 +58,15 @@ public class Lexer {
 		/*{ ?, ?, ?, ?, ?, ?}, /* 状態0 */
 		/*{ ?, ?, ?, ?, ?, ?}, /* 状態1 */
 		/*...*/
+
+	        {1, -1, 2, 3, 4, -1},	// 0 初期状態
+		{-1, -1, 5, 5, -1, -1}, // 1 「.」	
+		{1, 6,  7, 7, 4, -1},	// 2 0からはじまる　*
+		{1, -1, 3, 3, 4, -1},	// 3 1-9 *
+		{-1, -1, 4, 4, 4, -1},	// 4 a-f *
+		{-1, -1, 5, 5, -1, -1}, // 5 少数部 *
+		{-1, -1, 4, 4, 4, -1},  // 6 0X
+                {-1, -1, 7, 7, 4, -1}   //7 
 	};
 
 	/*
@@ -84,6 +93,15 @@ public class Lexer {
 			/* TODO */
 			/* 行先がなければループを抜ける */
 			/* 行先が受理状態であれば「最後の受理状態」を更新する */
+			if (nextState == -1) break;
+			if (nextState == 2 || nextState == 3 || nextState == 4){
+			    acceptMarker = Token.TYPE_INT;
+			    acceptPos = p;
+			}
+			if (nextState == 5) {
+			    acceptMarker = Token.TYPE_DEC;
+			    acceptPos = p;
+}
 
 			currentState = nextState;
 		}
